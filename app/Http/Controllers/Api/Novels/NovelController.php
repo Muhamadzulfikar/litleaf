@@ -8,7 +8,6 @@ use App\Http\Requests\Api\Novels\NovelRequest;
 use App\Models\Novels\Novel;
 use App\Models\Novels\NovelGenre;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class NovelController extends Controller
@@ -178,8 +177,32 @@ class NovelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Novel $novel)
+    public function destroy(Novel $novel): JsonResponse
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $existingFile = CloudinaryStorage::path($novel->cover);
+
+            if ($existingFile) {
+                CloudinaryStorage::delete($existingFile);
+            }
+
+            $novel->delete();
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ]);
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully Delete'
+        ]);
     }
 }
