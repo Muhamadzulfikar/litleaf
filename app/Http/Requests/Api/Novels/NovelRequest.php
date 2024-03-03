@@ -23,14 +23,27 @@ class NovelRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules =  [
             'user_uuid' => 'required|exists:users,uuid',
             'name' => 'required|string',
             'description' => 'required',
-            'image' => 'required|file|mimes:img,image,png',
+            'image' => 'required|file|mimes:jpg,jpeg,png',
             'is_publish' => 'required|boolean',
             'is_private' => 'required|boolean',
             'genre' => 'required|array',
+        ];
+
+        if ($this->method() === 'PUT') {
+            $rules['image'] = 'sometimes|nullable|file|mimes:jpg,jpeg,png';
+        }
+
+        return $rules;
+    }
+
+    public function attributes()
+    {
+        return [
+            'user_uuid' => 'user',
         ];
     }
 
@@ -43,6 +56,7 @@ class NovelRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'errors' => $validator->errors(),
+            'request' => request()->all(),
         ], 422));
     }
 }

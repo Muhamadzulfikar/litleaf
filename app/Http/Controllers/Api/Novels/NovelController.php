@@ -122,6 +122,21 @@ class NovelController extends Controller
         DB::beginTransaction();
 
         try {
+            if ($request->file('image')) {
+                $file = $request->file('image');
+                $existingFile = CloudinaryStorage::path($novel->cover);
+
+                if ($existingFile) {
+                    CloudinaryStorage::delete($existingFile);
+                }
+
+                $filepath = CloudinaryStorage::upload($file->getRealPath(), $file->getClientOriginalName());
+
+                $request->merge([
+                    'cover' => $filepath,
+                ]);
+            }
+
             $novel->update($request->except(['genre', 'image']));
             $genreRequest = $request->genre;
             $genreId = $novel->genre->pluck('id')->all();
