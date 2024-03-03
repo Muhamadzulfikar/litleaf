@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Api\Novels;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class NovelRequest extends FormRequest
 {
@@ -30,5 +32,17 @@ class NovelRequest extends FormRequest
             'is_private' => 'required|boolean',
             'genre' => 'required|array',
         ];
+    }
+
+    /**
+     * Failed Validation Error.
+     * @param Validator $validator
+     * @return void
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(response()->json([
+            'errors' => $validator->errors(),
+        ], 422));
     }
 }
