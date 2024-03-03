@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('novels', function (Blueprint $table) {
             $table->id();
             $table->uuid()->unique();
-            $table->foreignUuid('user_uuid')->references('uuid')->on('users')->cascadeOnDelete();
+            $table->foreignid('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('name');
             $table->text('description');
             $table->string('cover');
