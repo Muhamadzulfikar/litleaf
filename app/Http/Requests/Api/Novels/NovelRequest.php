@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Novels;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class NovelRequest extends FormRequest
@@ -23,7 +23,7 @@ class NovelRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules =  [
+        $rules = [
             'user_uuid' => 'required|exists:users,uuid',
             'name' => 'required|string',
             'description' => 'required',
@@ -49,8 +49,6 @@ class NovelRequest extends FormRequest
 
     /**
      * Failed Validation Error.
-     * @param Validator $validator
-     * @return void
      */
     protected function failedValidation(Validator $validator): void
     {

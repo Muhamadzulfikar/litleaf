@@ -16,7 +16,7 @@ class GenreSeeder extends Seeder
             'name' => 'Saint Fictions',
         ]);
 
-         Genre::create([
+        Genre::create([
             'name' => 'Psychology',
         ]);
     }

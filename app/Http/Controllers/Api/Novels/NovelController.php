@@ -85,7 +85,7 @@ class NovelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Novel $novel)
+    public function show(Novel $novel): JsonResponse
     {
         $novel->with('genre');
         $genreCollections = collect();
@@ -202,7 +202,7 @@ class NovelController extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => 'Successfully Delete'
+            'message' => 'Successfully Delete',
         ]);
     }
 }

@@ -11,7 +11,9 @@ class NovelGenre extends Model
     use HasFactory;
 
     protected $table = 'novel_genre';
+
     protected $primaryKey = 'id';
+
     protected $fillable = [
         'novel_uuid',
         'genre_id',
