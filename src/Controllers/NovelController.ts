@@ -33,9 +33,16 @@ class NovelController
         };
     }
 
-    async CreateNovel({req: { body } }: {req: {body : any} })
+    async CreateNovel({ body, error }: {body: any, error: any })
     {
-        const novel = await prisma.novel.create({ data: body })
+        let novel;
+
+        try {
+            novel = await prisma.novel.create({ data: body });
+        } catch (e: any) {
+            error(e.status, e.message);
+        }
+
         return {
             status: 'success',
             data: novel,
