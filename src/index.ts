@@ -1,15 +1,21 @@
-import { Elysia } from "elysia";
-import AuthController from "./Controllers/Admin/AuthController";
-import NovelController from "./Controllers/Admin/NovelController";
-
-const authController = new AuthController();
-const novelController = new NovelController();
+import { Elysia, t } from "elysia";
+import AuthController from "./Controllers/AuthController";
+import NovelController from "./Controllers/NovelController";
+import AuthRequest from "./Requests/AuthRequest";
+import NovelRequest from "./Requests/NovelRequest";
 
 const app = new Elysia()
-    .get("/", () => "Hello Elysia")
-    .post("/api/v1/auth/login", authController.login)
-    .post("/api/v1/auth/register", authController.register)
-    .get("/api/v1/novels", novelController.getNovel())
+    .post("/api/v1/auth/login", AuthController.login, AuthRequest.login)
+    .post("/api/v1/auth/register", AuthController.register, AuthRequest.register)
+
+    .get("/api/v1/novels", NovelController.getNovel)
+    .get("/api/v1/novels/:id", NovelController.getNovelById)
+    .post("/api/v1/novels", NovelController.CreateNovel, NovelRequest.createNovel)
+
+    .onError(({ code }) => {
+        if (code === 'NOT_FOUND')
+            return 'Route not found :('
+    })
     .listen(3000);
 
 console.log(
